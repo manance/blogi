@@ -23,7 +23,7 @@
     @foreach($comments as $comment)
         @if($comment->blog_id == $post->id) 
             <p>{{ $comment->author }} {{ $comment->updated_at }}<br>{{ $comment->comment }}</p>
-            <a href="/comments/{{ $comment->id }}">Rediģēt</a>
+            <a href="/comments/{{ $comment->id }}/edit">Rediģēt</a>
             <form method="POST" action="/comments/{{ $comment->id }}">
                 @csrf
                 @method("delete")
