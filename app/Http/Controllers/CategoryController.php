@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class CategoryController extends Controller
 {
@@ -23,6 +24,27 @@ class CategoryController extends Controller
         Category::create([
             "name" => $validated["name"]
         ]);
+        return redirect("/categories");
+    }
+    public function edit(Category $category){
+        return view('categories.edit', compact("category"));
+    }
+    public function update(Request $request, Category $category){
+        $validated = $request->validate([
+            "name" => ["required", "max:50"]
+        ]);
+        $category->name = $validated["name"];
+        $category->save();
+        return redirect("/categories/$category->id");
+    }
+    public function destroy(Category $category){
+        $posts = Post::all();
+        foreach($posts as $post){
+            if($post->category_id == $category->id){
+                $post->delete();
+            }
+        }
+        $category->delete();
         return redirect("/categories");
     }
 }
