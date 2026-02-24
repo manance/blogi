@@ -3,7 +3,7 @@
     <h1>Pievieno jaunu ierakstu!</h1>
     <form method="POST" action="/posts">
         @csrf
-        <input name="content">
+        <input name="content" value="{{ old('category', $post->content) }}">
         @error("content")
         <p>{{ $message }}</p>
         @enderror

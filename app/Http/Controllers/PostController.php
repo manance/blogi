@@ -12,7 +12,8 @@ class PostController extends Controller
         return view("posts.index", compact('posts'));
     }
     public function show(Post $post){
-        return view("posts.show", compact('post'));
+        $category = Category::findOrFail($post->category_id);
+        return view("posts.show", compact('post', 'category'));
     }
     public function create(Post $post){
         $categories = Category::all();
@@ -27,6 +28,26 @@ class PostController extends Controller
             "content" => $validated["content"],
             "category_id" => $validated["category"]
         ]);
+        return redirect('/posts');
+    }
+    public function edit(Post $post){
+        $categories = Category::all();
+        return view('posts.edit', compact('post', 'categories'));
+    }
+    public function update(Request $request, Post $post){
+        $validated = $request->validate([
+            "content" => ["required", "max:100"],
+            "category" => ["required"]
+        ]);
+        $post->update([
+            "content" => $validated["content"],
+            "category_id" => $validated["category"]
+        ]);
+        $post->save();
+        return redirect("/posts/$post->id");
+    }
+    public function destroy(Post $post){
+        $post->delete();
         return redirect('/posts');
     }
 }
