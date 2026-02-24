@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Category;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Post;
 
@@ -39,8 +40,14 @@ class CategoryController extends Controller
     }
     public function destroy(Category $category){
         $posts = Post::all();
+        $comments = Comment::all();
         foreach($posts as $post){
             if($post->category_id == $category->id){
+                foreach($comments as $comment){
+                    if($comment->blog_id == $post->id){
+                        $comment->delete();
+                    }
+                }
                 $post->delete();
             }
         }

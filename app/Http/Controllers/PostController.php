@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -12,8 +13,9 @@ class PostController extends Controller
         return view("posts.index", compact('posts'));
     }
     public function show(Post $post){
+        $comments = Comment::all();
         $category = Category::findOrFail($post->category_id);
-        return view("posts.show", compact('post', 'category'));
+        return view("posts.show", compact('post', 'category', 'comments'));
     }
     public function create(Post $post){
         $categories = Category::all();
@@ -47,6 +49,12 @@ class PostController extends Controller
         return redirect("/posts/$post->id");
     }
     public function destroy(Post $post){
+        $comments = Comment::all();
+        foreach($comments as $comment){
+            if($comment->blog_id == $post->id){
+                $comment->delete();
+            }
+        }
         $post->delete();
         return redirect('/posts');
     }
