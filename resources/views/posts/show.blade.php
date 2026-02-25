@@ -12,23 +12,21 @@
         @csrf
         <label>Komentārs: <input name="comment" value="{{ old('comment', '') }}"></label>
         @error("comment")
-            <p>{{ $message }}</p>
+        <p>{{ $message }}</p>
         @enderror
         <label>Autors: <input name="author" value="{{ old('author', '') }}"></label>
         @error("author")
-            <p>{{ $message }}</p>
+        <p>{{ $message }}</p>
         @enderror
         <button name="id" value="{{ $post->id }}">Iesniegt</button>
     </form>
-    @foreach($comments as $comment)
-        @if($comment->blog_id == $post->id) 
-            <p>{{ $comment->author }} {{ $comment->updated_at }}<br>{{ $comment->comment }}</p>
-            <a href="/comments/{{ $comment->id }}/edit">Rediģēt</a>
-            <form method="POST" action="/comments/{{ $comment->id }}">
-                @csrf
-                @method("delete")
-                <button>Dzēst</button>
-            </form>
-        @endif
+    @foreach($post->comments as $comment)
+    <p>{{ $comment->author }} {{ $comment->updated_at }}<br>{{ $comment->comment }}</p>
+    <a href="/comments/{{ $comment->id }}/edit">Rediģēt</a>
+    <form method="POST" action="/comments/{{ $comment->id }}">
+        @csrf
+        @method("delete")
+        <button>Dzēst</button>
+    </form>
     @endforeach
 </x-layout>

@@ -15,7 +15,7 @@ class CommentController extends Controller
         Comment::create([
             "comment" => $validated["comment"],
             "author" => $validated["author"],
-            "blog_id" => $validated["id"]
+            "post_id" => $validated["id"]
         ]);
         return redirect("/posts/" . $validated["id"]);
     }
@@ -30,10 +30,10 @@ class CommentController extends Controller
             "comment" => $validated["comment"],
         ]);
         $comment->save();
-        return redirect("/posts/" . $comment->blog_id);
+        return redirect("/posts/" . $comment->post_id);
     }
     public function destroy(Comment $comment){
         $comment->delete();
-        return redirect("/posts/" . $comment->blog_id);
+        return redirect("/posts/" . $comment->post_id);
     }
 }

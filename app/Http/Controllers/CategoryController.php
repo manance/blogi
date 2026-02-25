@@ -39,18 +39,6 @@ class CategoryController extends Controller
         return redirect("/categories/$category->id");
     }
     public function destroy(Category $category){
-        $posts = Post::all();
-        $comments = Comment::all();
-        foreach($posts as $post){
-            if($post->category_id == $category->id){
-                foreach($comments as $comment){
-                    if($comment->blog_id == $post->id){
-                        $comment->delete();
-                    }
-                }
-                $post->delete();
-            }
-        }
         $category->delete();
         return redirect("/categories");
     }
